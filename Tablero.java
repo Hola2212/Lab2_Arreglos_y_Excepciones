@@ -15,6 +15,7 @@ public class Tablero{
         this.ancho = ancho;
         this.parejasEncontradas = 0;
         this.parejasDisponibles = alto*ancho/2;
+        asignacionCaracteres();
     }
     public void asignacionCaracteres(){
         for (int i = 0; i < parejasDisponibles; i++) {
@@ -23,17 +24,29 @@ public class Tablero{
             while(controlador1){
                 int coordenada1 = (int)((Math.random() * (alto)));
                 int coordenada2 = (int)((Math.random() * (ancho)));
-                if (casillas[coordenada1][coordenada2].getSimbol().equals("")){
+                if((casillas[coordenada1][coordenada2] == null)) {
+                    casillas[coordenada1][coordenada2] = new Carta();
                     casillas[coordenada1][coordenada2].setSimbolo(caracteres.get(i));
                     controlador1 = false;
+                } else {
+                    if (casillas[coordenada1][coordenada2].getSimbol().equals("")){
+                        casillas[coordenada1][coordenada2].setSimbolo(caracteres.get(i));
+                        controlador1 = false;
+                    }
                 }
             }
             while(controlador2){
                 int coordenada1 = (int)((Math.random() * (alto)));
                 int coordenada2 = (int)((Math.random() * (ancho)));
-                if (casillas[coordenada1][coordenada2].getSimbol().equals("")){
+                if((casillas[coordenada1][coordenada2] == null)) {
+                    casillas[coordenada1][coordenada2] = new Carta();
                     casillas[coordenada1][coordenada2].setSimbolo(caracteres.get(i));
                     controlador2 = false;
+                } else {
+                    if (casillas[coordenada1][coordenada2].getSimbol().equals("")){
+                        casillas[coordenada1][coordenada2].setSimbolo(caracteres.get(i));
+                        controlador2 = false;
+                    }
                 }
             }
         }
@@ -50,7 +63,11 @@ public class Tablero{
     public int getParejasEncontradas(){
         return this.parejasEncontradas;
     }
+    public void setParejasEncontradas(){
+        this.parejasEncontradas = parejasEncontradas + 1;
+    }
     public String getCelda(int r, int c){
+        System.out.println(r + "," +c);
         return casillas[r][c].toString();
     }
     public String getSimboloCelda(int r, int c){
