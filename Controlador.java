@@ -3,37 +3,49 @@ public class Controlador {
     private Jugador jugador1;
     private Jugador jugador2;
     private Tablero tablerito;
-    public Controlador(){
+    public Controlador(){       //Inicializador donde se instancia el uso de consola (Interaccion con persona)
         this.consolita = new Consola();
     }
-    public void jugar(){
+    public void jugar(){        //Se inicia el juego, estableciendo jugadores y comenzando el juego
         this.jugador1 = new Jugador(consolita.pedirNombre(1));
         this.jugador2 = new Jugador(consolita.pedirNombre(2));
         inicioPartida();
     }
-    public void inicioPartida(){
-        int ancho = consolita.mensajePedirAncho();
-        int alto = consolita.mensajePedirAltura();
-        tablerito = new Tablero(alto, ancho);
+    public void inicioPartida(){        //Inicializador de cada ronda
+        boolean paridad = false;        //Se resetean los valor del tablero para iniciar una nueva ronda
+        jugador1.resetPuntos();
+        jugador2.resetPuntos();
+        int ancho = 0;
+        int alto = 0;
+        while (!paridad){
+            ancho = consolita.mensajePedirAncho();
+            alto = consolita.mensajePedirAltura();
+            if (alto*ancho % 2 == 0){
+                paridad = true;
+            }
+        }
+        tablerito = new Tablero(alto, ancho);       //Comienza ronda
         consolita.mensajeBienvenida(alto, ancho, tablerito.getParejasDisponibles());
         consolita.imprimirTablero(tablerito);
         ronda(alto,ancho);
     }
-    public void ronda(int alto, int ancho){
+    public void ronda(int alto, int ancho){         //Logica detras de cada ronda del juego. Se puede simplificar, ya que se recicla mucho codigo.
         boolean comprobarTurno = true;
         String nombre = "";
         boolean comprobacionSalida = true;
         boolean comprobacionRendir = true;
-        while(tablerito.getParejasDisponibles() > tablerito.getParejasEncontradas() && comprobacionSalida && comprobacionRendir){
-            if (comprobarTurno){
+        while(tablerito.getParejasDisponibles() > tablerito.getParejasEncontradas() && comprobacionSalida && comprobacionRendir){       //Comprobacion para continuar con la ronda
+            if (comprobarTurno){        //Controlador turno de jugador
+                comprobarTurno = false;     //Logica turno de jugador 1
                 nombre = jugador1.getNombre();
+                consolita.imprimirTablero(tablerito);
                 String respuesta = consolita.mensajeDeTurno(nombre);
                 switch (respuesta) {
                 case "REVELAR" -> {
                     jugador2.setPartidasGanadas();
                     consolita.mensajeGanadorRonda(jugador2.getNombre(), jugador2.getPuntos());
                     for (int i = 0; i < alto; i++) {
-                        for (int e = 0; ancho < 5; e++) {
+                        for (int e = 0; e < ancho; e++) {
                             tablerito.revelarCarta(i,e);
                         }
                     }
@@ -93,7 +105,8 @@ public class Controlador {
                     }
                 }}
             }
-            else{
+            else{           //Logica turno de jugador 2. Misma que para jugador 1, aunque con los efectos de puntos y nombres cambiados.
+                comprobarTurno = true;
                 nombre = jugador2.getNombre();
                 String respuesta = consolita.mensajeDeTurno(nombre);
                 switch (respuesta) {
@@ -183,9 +196,11 @@ public class Controlador {
         int puntosJug2 = jugador2.getPuntos();
         if (puntosJug1 > puntosJug2){
             consolita.mensajeGanadorRonda(jugador1.getNombre(), puntosJug1);
+            jugador1.setPartidasGanadas();
         }
         else if (puntosJug1 < puntosJug2) {
             consolita.mensajeGanadorRonda(jugador2.getNombre(), puntosJug2);
+            jugador2.setPartidasGanadas();
         }
         else{
             consolita.mensajeEmpateRonda(puntosJug1);
@@ -204,5 +219,4 @@ public class Controlador {
             consolita.mensajeEmpateRonda(partidasJug1);
         }
     }
-
 }

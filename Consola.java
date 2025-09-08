@@ -22,7 +22,7 @@ public class Consola{
             Imp.print(c+" ");
         }
         Imp.println("");
-        for (int r = 0; r < alto; r++) {
+        for (int r = 0; r < alto; r++) {        //Se recorre la matriz que contiene el tablero.
             Imp.print((char)('A' + r) + " ");
             for (int c = 0; c < ancho; c++) {
                 Imp.print(t.getCelda(r, c) + " ");
@@ -51,26 +51,20 @@ public class Consola{
         Imp.println("En esta partida, ambos jugadores han empatado con " + partidas + " rondas ganadas.");
     }
     public int mensajePedirAltura(){
-        Imp.println("Ingrese la altura del tablero. (Debe ser un entero positivo par)");
-        int altura = 1;
-        while (altura%2 == 1){
-            altura = sc.nextInt();
-        }
+        Imp.println("Ingrese la altura del tablero. (Debe ser un entero positivo y par al multiplicarse con el ancho)");
+        int altura = sc.nextInt();
         return altura;
     }
     public int mensajePedirAncho(){
-        Imp.println("Ingrese el ancho del tablero. (Debe ser un entero positivo par)");
-        int ancho = 1;
-        while (ancho%2 == 1){
-            ancho = sc.nextInt();
-        }
+        Imp.println("Ingrese el ancho del tablero. (Debe ser un entero positivo y par al multiplicarse con la altura)");
+        int ancho = sc.nextInt();
         return ancho;
     }
     public String mensajeDeTurno(String nombre){
         Imp.println("Es el turno de "+ nombre + ". Seleccione uno de los comandos:");
         Imp.println("\tCOORDENADAS\n\tREVELAR para mostrar el tablero\n\tSALIR para reiniciar el juego.");
         String resp = "";
-        while(resp.equals("")){
+        while(!resp.equals("COORDENADAS") && !resp.equals("REVELAR") && !resp.equals("SALIR")){
             resp = sc.nextLine();
         }
         return resp;
